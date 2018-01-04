@@ -1,0 +1,41 @@
+<pretty-config xmlns="http://ocpsoft.org/schema/rewrite-config-prettyfaces" 
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+               xsi:schemaLocation="http://ocpsoft.org/schema/rewrite-config-prettyfaces
+                      http://ocpsoft.org/xml/ns/prettyfaces/rewrite-config-prettyfaces.xsd">
+
+    <url-mapping id="login">
+        <pattern value="/login" />
+        <view-id value="/secure/login.pf" />	
+    </url-mapping>
+
+    <url-mapping id="principal">
+        <pattern value="/principal" />
+        <view-id value="/secure/pages/registrarUsuario.pf" />	
+    </url-mapping>
+        
+    <url-mapping id="buscadorContrato">
+        <pattern value="/buscadorContrato" />
+        <view-id value="/secure/pages/buscadorContratos.pf" />	
+    </url-mapping>
+    
+    <url-mapping id="registrarUsuarioSap">
+        <pattern value="/registrarUsuarioSap" />
+        <view-id value="/secure/pages/registrarUsuario.pf" />	
+    </url-mapping>
+    
+    <url-mapping id="modificarUsuarioSap">
+        <pattern value="/modificarUsuarioSap" />
+        <view-id value="/secure/pages/modificarUsuario.pf" />	
+    </url-mapping>
+	
+    <url-mapping id="error">
+        <pattern value="/error" />
+        <view-id value="/secure/error.pf" />	
+    </url-mapping>
+        
+    <url-mapping id="accesoden">
+        <pattern value="/accesoden" />
+        <view-id value="/secure/accesoDenegado.pf" />	
+    </url-mapping>
+
+</pretty-config>

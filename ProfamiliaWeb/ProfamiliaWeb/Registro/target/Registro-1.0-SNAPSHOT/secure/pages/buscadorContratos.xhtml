@@ -1,0 +1,287 @@
+<ui:composition template="/templates/defaultTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:o="http://omnifaces.org/ui">
+
+    <ui:define name="contenido">
+
+        <h:form id="buscadorContratosForm">
+            <p:panel header="#{bundle.header_con_contrato}">
+                <div class="ui-fluid">
+
+                    <p:messages id="messagesBuscadorContratosForm" closable="true" severity="error" autoUpdate="true" />
+
+                    <p:panelGrid columns="4" columnClasses="ui-grid-col-2,ui-grid-col-4,ui-grid-col-2,ui-grid-col-4" styleClass="ui-panelgrid-blank">
+
+                        <p:outputLabel value="#{bundle.lb_cod_cont}" for="contrato"/>
+                        
+                        <p:panelGrid columns="2" columnClasses="aux-force-padding-1px ui-grid-col-10,aux-force-padding-1px ui-grid-col-2" >
+                            <p:inputText id="contrato" value="#{buscadorContratos.contratoSelect.cpcontratoPK.ccnnnumero}" title="#{bundle.tl_cont}"   autocomplete="false"> 
+                                <p:ajax event="change" listener="#{buscadorContratos.changeContratoSeleccion}" update="@form" />
+                            </p:inputText>
+                            <p:commandButton icon="fa fa-search"
+                                             update="@widgetVar(modalContrato)" process="@this" 
+                                             oncomplete="PF('modalContrato').show();" actionListener="#{buscadorContratos.clearModalContrato}" />
+                        </p:panelGrid>
+
+                        <p:outputLabel value="#{bundle.lb_cod_serv}" for="servicio"/>
+                        <p:panelGrid columns="2" columnClasses="aux-force-padding-1px ui-grid-col-10,aux-force-padding-1px ui-grid-col-2" >
+                            <p:inputText id="servicio" value="#{buscadorContratos.servicioSelect.csvccodigo}" title="#{bundle.tl_serv}"  autocomplete="false">
+                                <p:ajax event="change" listener="#{buscadorContratos.changeServicioSeleccion}" update="@form" />
+                            </p:inputText>
+                            <p:commandButton  icon="fa fa-search"
+                                              update="@widgetVar(modalServicio)" process="@this" 
+                                              oncomplete="PF('modalServicio').show();"  actionListener="#{buscadorContratos.clearModalServicio()}" />
+                        </p:panelGrid>
+                        
+                        <p:spacer/>
+                        <p:outputLabel value="#{buscadorContratos.contratoSelect.ccncdescri}" />
+                        
+                        <p:spacer/>
+                        <p:outputLabel value="#{buscadorContratos.servicioSelect.csvcnombre}" />
+
+                    </p:panelGrid>  
+                </div>
+
+                <p:spacer />
+                <p:panel styleClass="ui-button-group">
+                    <p:commandButton icon="fa fa-search" 
+                                     value="#{bundle.bt_consulta_con}" 
+                                     partialSubmit="true"
+                                     actionListener="#{buscadorContratos.consultaContrato}"
+                                     disabled="#{empty buscadorContratos.contratoSelect}"
+                                     update="@widgetVar(growl), @form" 
+                                     process="@this "/>
+                </p:panel>
+
+                <div class="ui-fluid">
+                    <p:outputPanel id="resultadoConsulta">
+                        <!-- se le quito la seleccion-->
+                        <p:dataTable
+                            id="servXContratosDatalist" value="#{buscadorContratos.lstcontra}" var="item"   
+                            selectionMode="single" selection="#{buscadorContratos.servXContrSelect}"
+                            rowKey="#{item[0]}#{item[1]}#{item[2]}#{item[3]}#{item[4]}#{item[5]}#{item[6]}"
+                            paginator="true"
+                            paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                            rows="10"
+                            rowsPerPageTemplate="10,50,100">
+
+                            <p:ajax event="rowSelect"   update="@widgetVar(modalDetalle),@widgetVar(growl)" listener="#{buscadorContratos.consultaDetalleContrato}"/>
+                            <p:ajax event="rowUnselect" update="@widgetVar(modalDetalle),@widgetVar(growl)" oncomplete="PF('modalDetalle').hide();"/>
+
+
+                            <p:column style="width: 10%">
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.lb_contra_tabla}"/>
+                                </f:facet>
+                                <h:outputText value="#{item[0]}"/>
+                            </p:column>
+
+                            <p:column style="width: 10%">
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.lb_fecha_ini}"/>
+                                </f:facet>
+                                <h:outputText value="#{item[1]}">
+                                    <f:convertDateTime pattern="dd-MM-yyyy" />
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column style="width: 10%">
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.lb_fecha_fin}"/>
+                                </f:facet>
+                                <h:outputText value="#{item[2]}">
+                                    <f:convertDateTime pattern="dd-MM-yyyy" />
+                                </h:outputText>
+                            </p:column>
+
+                            <p:column style="width: 50%">
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.lb_ser}"/>
+                                </f:facet>
+                                <h:outputText value="#{item[4]} #{item[6]}"/>
+                            </p:column>
+
+                            <p:column style="width: 10%">
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.lb_util}"/>
+                                </f:facet>
+                                <h:outputText value="#{item[8]}"/>
+                            </p:column>
+
+                            <p:column style="width: 10%">
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.lb_valor}"/>
+                                </f:facet>
+                                <h:outputText value="#{item[7]}">                                    
+                                    <f:convertNumber pattern="¤#,##0.00" currencySymbol="$" />
+                                </h:outputText>
+                            </p:column>
+
+                        </p:dataTable>
+                    </p:outputPanel>
+                </div>
+            </p:panel>
+        </h:form>
+
+        <p:dialog widgetVar="modalContrato" header="#{bundle.header_bus_contrato}" modal="true" resizable="false" appendTo="@(body)" width="900">
+            <h:form>
+                <div class="ui-fluid" >
+                    <p:messages id="messagesModalContrato" closable="true" severity="error" />
+                    <p:panelGrid columns="4" styleClass="ui-panelgrid-blank">
+
+                        <p:outputLabel value="#{bundle.lb_codigo_}" for="cod_contrato"></p:outputLabel>
+                        <p:inputText id="cod_contrato" value="#{buscadorContratos.contratoQuery.cpcontratoPK.ccnnnumero}"/>
+
+
+                        <p:outputLabel value="#{bundle.lb_nombre_}" for="desc_contrato"/>
+                        <p:inputText id="desc_contrato" value="#{buscadorContratos.contratoQuery.ccncdescri}" />
+
+                    </p:panelGrid>
+                </div>
+                
+                <p:spacer/>
+                <p:panel styleClass="ui-button-group">
+                    <p:commandButton icon="fa fa-search" value="#{bundle.bt_consulta_con}" actionListener="#{buscadorContratos.consultarContratos}" update="@widgetVar(growl),@form" oncomplete="PF('modalContrato').initPosition();" />
+                    <p:commandButton icon="fa fa-times" value="#{bundle.bt_cerrar_con}" type="button" onclick="PF('modalContrato').hide();" />                        
+                </p:panel>
+                
+                <div class="ui-fluid" >
+                    <p:dataTable id="contratosDatalist" value="#{buscadorContratos.lstContratos}" var="item" scrollable="true"
+                                 selectionMode="single" selection="#{buscadorContratos.contratoSelect}" scrollHeight="230"
+                                 paginator="true"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowKey="#{item.cpcontratoPK}"
+                                 rows="10"
+                                 rowsPerPageTemplate="#{bundle.rowsPerPageTemplate}" >
+
+                        <p:ajax event="rowSelect"   update=":buscadorContratosForm,@widgetVar(filtroConsulta)" oncomplete="PF('modalContrato').hide();"/>
+                        <p:ajax event="rowUnselect" update=":buscadorContratosForm,@widgetVar(filtroConsulta)" oncomplete="PF('modalContrato').hide();"/>
+                        <p:ajax event="page" oncomplete="PF('modalContrato').initPosition();" />
+
+                        <p:column style="width: 10%">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.lb_codigo_tabla}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.cpcontratoPK.ccnnnumero}"/>
+                        </p:column>
+                        <p:column style="width: 50%">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.lb_nombre_tabla}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.ccncdescri}"/>
+                        </p:column>
+                        <p:column style="width: 20%">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.lb_depto_tabla}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.ccncdepart}"/>
+                        </p:column>
+                        <p:column style="width: 20%">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.lb_ciudad_tabla}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.ccncciudad}"/>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </h:form>
+        </p:dialog>
+
+        <p:dialog widgetVar="modalServicio" header="Buscar Servicios" modal="true" resizable="false" appendTo="@(body)" width="900">
+            <h:form>
+                <div class="ui-fluid">
+                    <p:messages id="messagesModalServicio" closable="true" severity="error" />
+                    <p:panelGrid columns="4" styleClass="ui-panelgrid-blank">
+
+                        <p:outputLabel value="#{bundle.lb_codigo_}" for="cod_serv"></p:outputLabel>
+                        <p:inputText id="cod_serv" value="#{buscadorContratos.servicioQuery.csvccodigo}"/>
+
+
+                        <p:outputLabel value="#{bundle.lb_nombre_}" for="desc_serv"/>
+                        <p:inputText id="desc_serv" value="#{buscadorContratos.servicioQuery.csvcnombre}" />
+
+                    </p:panelGrid>
+                </div>
+                
+                <p:spacer/>
+                <p:panel styleClass="ui-button-group">
+                    <p:commandButton icon="fa fa-search" value="#{bundle.bt_consulta_con}" actionListener="#{buscadorContratos.consultarServicios}" update="@widgetVar(growl),@form" />
+                    <p:commandButton icon="fa fa-times" value="#{bundle.bt_cerrar_con}" type="button" onclick="PF('modalServicio').hide();" />                        
+                </p:panel>
+                
+                <div class="ui-fluid">
+                    <p:dataTable id="serviciosDatalist" value="#{buscadorContratos.lstServicios}" var="item" scrollHeight="230" scrollable="true"
+                                 selectionMode="single" selection="#{buscadorContratos.servicioSelect}"
+                                 paginator="true"
+                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                 rowKey="#{item.csvccodigo}"
+                                 rows="10"
+                                 rowsPerPageTemplate="#{bundle.rowsPerPageTemplate}" >
+
+                        <p:ajax event="rowSelect"   update=":buscadorContratosForm,@widgetVar(filtroConsulta)" oncomplete="PF('modalServicio').hide();"/>
+                        <p:ajax event="rowUnselect" update=":buscadorContratosForm,@widgetVar(filtroConsulta)" oncomplete="PF('modalServicio').hide();"/>
+                        <p:ajax event="page" oncomplete="PF('modalServicio').initPosition();" />
+
+                        <p:column style="width: 20%">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.lb_codigo_tabla}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.csvccodigo}"/>
+                        </p:column>
+                        <p:column style="width: 80%">
+                            <f:facet name="header">
+                                <h:outputText value="#{bundle.lb_nombre_tabla}"/>
+                            </f:facet>
+                            <h:outputText value="#{item.csvcnombre}"/>
+                        </p:column>
+                    </p:dataTable>
+                </div>
+            </h:form>
+        </p:dialog>
+
+
+        <p:dialog widgetVar="modalDetalle" header="Detalle Servicios" modal="true" resizable="false" appendTo="@(body)" width="900">
+
+            <h:form id="modalDetalleForm">
+                <p:outputPanel id="outputDetalle">
+                    <div class="ui-fluid">
+                        <p:dataTable id="detalleDatalist" value="#{buscadorContratos.lstDetalleContra}" var="item"
+                                     paginator="true"
+                                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink}"
+                                     rows="10" >
+
+                            <p:column style="width: 20%">
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.lb_contra_tabla}"/>
+                                </f:facet>
+                                <h:outputText value="#{item[0]}"/>
+                            </p:column>
+                            
+                            <p:column style="width: 60%">
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.lb_ser}"/>
+                                </f:facet>
+                                <h:outputText value="#{item[1]} #{item[2]}"/>
+                            </p:column>
+
+                            <p:column style="width: 20%">
+                                <f:facet name="header">
+                                    <h:outputText value="#{bundle.lb_valor}"/>
+                                </f:facet>
+                                <h:outputText value="#{item[3]}">
+                                    <f:convertNumber pattern="¤#,##0.00" currencySymbol="$" />
+                                </h:outputText>
+                            </p:column>
+
+                        </p:dataTable>
+                    </div>
+                </p:outputPanel>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+
+</ui:composition>

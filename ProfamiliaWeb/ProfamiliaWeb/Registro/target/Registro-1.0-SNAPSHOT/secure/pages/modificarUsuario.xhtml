@@ -1,0 +1,19 @@
+<ui:composition template="/templates/defaultTemplate.xhtml"
+                xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:b="http://bootsfaces.net/ui"
+                xmlns:p="http://primefaces.org/ui">
+
+    <ui:define name="contenido">
+
+        <ui:include src="includeRegisterupdate.xhtml">
+            <ui:param name="bean" value="#{modificarBean}"/>
+            <ui:param name="type" value="edit"/>
+            <ui:param name="title" value="Modificar Usuarios Profamilia"/>
+        </ui:include>
+
+    </ui:define>
+
+</ui:composition>

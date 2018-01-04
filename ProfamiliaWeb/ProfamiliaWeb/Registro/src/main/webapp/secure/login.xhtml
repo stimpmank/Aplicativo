@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Profamilia</title>
+        <h:outputScript library="primefaces" name="jquery/jquery.js" />
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
+
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"/>
+
+        <!-- Optional theme -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous"/>
+
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+    </h:head>
+    <h:body>
+    <img src="#{request.contextPath}/javax.faces.resource/img/doctor.jpg.pf" style="max-height: 100%; max-width: 100%;"   />
+        <style>                
+            body{
+                /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#42a5f6+0,75bbf4+47,42a5f6+100 */
+                background: rgb(66,165,246); /* Old browsers */
+                background: -moz-linear-gradient(top, rgba(66,165,246,1) 0%, rgba(117,187,244,1) 47%, rgba(66,165,246,1) 100%); /* FF3.6-15 */
+                background: -webkit-linear-gradient(top, rgba(66,165,246,1) 0%,rgba(117,187,244,1) 47%,rgba(66,165,246,1) 100%); /* Chrome10-25,Safari5.1-6 */
+                background: linear-gradient(to bottom, rgba(66,165,246,1) 0%,rgba(117,187,244,1) 47%,rgba(66,165,246,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+                filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#42a5f6', endColorstr='#42a5f6',GradientType=0 ); /* IE6-9 */
+            }
+
+            .login-form{
+                max-width: 30em; 
+                position: absolute; 
+                left:30%; 
+                top: 50%; 
+                transform: translate(-50%, -50%); 
+                border-radius: 10px;
+                border: 3px solid #42A5F6; 
+                background-color: #f2f2f2;
+                padding: 3em;
+            }
+
+            .btn-primary{
+                background: none !important; 
+                border: none !important;
+                background-color: #42A5F6 !important;
+            }
+
+            .btn-primary:hover{
+                background: none;
+                border: none;
+                background-color: #75BF4C;
+            }
+
+            .form-signin-heading{
+                color: #42A5F6;
+                font-weight: bold;
+            }
+
+        </style>
+
+        <div class="container-fluid text-center" style="min-height: 100vh; min-width: 100vw;">
+
+            <div class="row login-form">
+
+                <div class="row">
+                    <h2 class="form-signin-heading">BIENVENIDO</h2>
+                    <img class="img-circle" src="#{request.contextPath}/javax.faces.resource/img/profamilia_7686619466.jpg.pf" style="max-height: 120px; max-width: 120px; margin: 1em;"/>
+                </div>
+
+                <div class="row" >
+                    <form action="${request.contextPath}/appLogin" method="post">
+
+                        <p>Para acceder al sistema, ingrese su usuario y contraseña en los campos que se muestran a continuación.</p>
+
+                        <div id="email" class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <span><i class="fa fa-user" aria-hidden="true"></i></span>
+                                </span>
+                                <input id="app_username" name="app_username" type="text" class="form-control bf-no-message has-success" placeholder="Usuario" required="true"/>
+                            </div>
+                        </div>
+                        <div id="password" class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <span><i class="fa fa-lock" aria-hidden="true"></i></span>
+                                </span>
+                                <input id="app_password" name="app_password" type="password" class="form-control bf-no-message has-success" placeholder="Contraseña" required="true"/></div>
+                        </div>
+
+                        <button type="submit" id="j_idt11" name="j_idt11" class="btn btn-lg btn-primary btn-block">
+                            <span><i class="fa fa-sign-in"></i></span>
+                            Ingresar
+                        </button>
+
+                    </form>
+                </div>
+
+                <div class="row" style="margin-top: 2em;" >
+                    <span style="color:red; font-weight: bold">${SPRING_SECURITY_LAST_EXCEPTION.message}</span>
+                </div>
+            </div>
+
+        </div>
+
+    </h:body>
+
+</html>

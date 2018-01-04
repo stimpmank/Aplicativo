@@ -1,0 +1,435 @@
+<ui:fragment xmlns="http://www.w3.org/1999/xhtml"
+             xmlns:ui="http://java.sun.com/jsf/facelets"
+             xmlns:h="http://java.sun.com/jsf/html"
+             xmlns:f="http://java.sun.com/jsf/core"
+             xmlns:p="http://primefaces.org/ui"
+             xmlns:o="http://omnifaces.org/ui">
+
+    <h:form id="AddUserForm">
+   
+     
+	<p:fieldset legend="#{title}" >
+	
+        <p:panel id="datosCons" widgetVar="panel0" header="#{bundle.header_consulta}">
+            <div class="ui-fluid">
+                <p:messages id="messagesAddUserForm" closable="true" severity="error" autoUpdate="true"/>
+                <p:panelGrid columns="4" layout="grid" columnClasses="ui-grid-col-3,ui-grid-col-3,ui-grid-col-3,ui-grid-col-3" styleClass="ui-panelgrid-blank">
+                    <h:panelGroup>
+                        <p:outputLabel value="#{bundle.lb_tipo_iden}" for="typeId" />
+                        <p:selectOneMenu id="typeId"                                      
+                                         required="true" 
+                                         label="#{bundle.lb_tipo_iden}"
+                                         converter="omnifaces.SelectItemsConverter"
+                                         value="#{bean.usuarioSAP.husetipoiden}" >
+                            <f:selectItem itemLabel="Seleccione una opción..." itemValue=""></f:selectItem>
+                            <f:selectItems value="#{bean.listTipoIdentificacion}" var="ref" itemLabel="#{ref.label}" itemValue="#{ref.value}"/>                        
+                        </p:selectOneMenu>
+                    </h:panelGroup>
+                    <h:panelGroup>
+                        <p:outputLabel value="#{bundle.lb_num_iden}" for="numId" />
+
+                        <p:panelGrid columns="2" columnClasses="aux-force-padding-1px ui-grid-col-10,aux-force-padding-1px ui-grid-col-2" >
+                            <p:inputText id="numId" value="#{bean.usuarioSAP.husanumeiden}" title="#{bundle.lb_num_iden}" 
+                                         required="true" label="#{bundle.lb_num_iden}">
+                                <o:validator validatorId="cadena.stringValidator" />
+                            </p:inputText>
+
+                            <p:commandButton icon="fa fa-search" id="consultaUsuario"                                          
+                                             partialSubmit="true"
+                                             class="ui-button-icon-only"
+                                             actionListener="#{bean.consultarUsuario}" 
+                                             update="@form,@widgetVar(growl),@widgetVar(modalUsuarios)" 
+                                             process="@this,typeId,numId"/>
+                        </p:panelGrid>
+                    </h:panelGroup>
+                </p:panelGrid>
+            </div>            
+        </p:panel>
+        
+        </p:fieldset>
+
+        <p:outputPanel id="panels" layout="none">
+            <p:panel id="datosPer" widgetVar="panel1" header="#{bundle.header_per}" 
+                     rendered="#{bean.showPanels}">
+
+                <div class="ui-fluid">
+                    <p:panelGrid columns="4" layout="grid" columnClasses="ui-grid-col-3,ui-grid-col-3,ui-grid-col-3,ui-grid-col-3" styleClass="ui-panelgrid-blank">
+
+                        <h:panelGroup rendered="#{type == 'edit'}">
+                            <p:outputLabel value="#{bundle.lb_num_usuario}" for="userNumber"/>
+                            <p:inputText maxlength="50" id="userNumber" value="#{bean.usuarioSAP.huslnumero}" title="#{bundle.lb_num_usuario}" label="#{bundle.lb_num_usuario}" required="true" requiredMessage=" Por favor ingresar el #{bundle.lb_num_usuario}"  disabled="true">
+                                <f:validator validatorId="cadena.stringValidator"/>
+                            </p:inputText>
+                        </h:panelGroup>
+
+                        <h:panelGroup>
+                            <p:outputLabel value="#{bundle.lb_pri_nom}" for="firstName" />
+                            <p:inputText maxlength="50" id="firstName" value="#{bean.usuarioSAP.huscprimernomb}" title="#{bundle.lb_pri_nom}" required="true" label="#{bundle.lb_pri_nom}">
+                                <f:validator validatorId="cadena.stringValidator"/>
+                            </p:inputText>
+                        </h:panelGroup>
+
+                        <h:panelGroup>
+                            <p:outputLabel value="#{bundle.lb_seg_nom}" for="secondName" />
+                            <p:inputText  maxlength="50" id="secondName" value="#{bean.usuarioSAP.huscsegundnomb}" title="#{bundle.lb_seg_nom}" label="#{bundle.lb_seg_nom}">
+                                <f:validator validatorId="cadena.stringValidator"/>
+                            </p:inputText>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <p:outputLabel value="#{bundle.lb_pri_ape}" for="lastName" />                                
+                            <p:inputText  maxlength="50" id="lastName" value="#{bean.usuarioSAP.huscprimerapel}" title="#{bundle.lb_pri_ape}" required="true" label="#{bundle.lb_pri_ape}">
+                                <f:validator validatorId="cadena.stringValidator"/>
+                            </p:inputText>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <p:outputLabel value="#{bundle.lb_seg_ape}" for="surName" />
+                            <p:inputText  maxlength="50" id="surName" value="#{bean.usuarioSAP.huscsegundapel}" title="#{bundle.lb_seg_ape}" label="#{bundle.lb_seg_ape}">
+                                <f:validator validatorId="cadena.stringValidator"/>
+                            </p:inputText>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <p:outputLabel value="#{bundle.lb_fech_naci}" for="birthdate" />
+                            <p:calendar navigator="true" yearRange="c-20:c+1"  maxlength="50" id="birthdate" value="#{bean.usuarioSAP.husdfechanacim}" pattern="dd/MM/yyyy" title="#{bundle.lb_fech_naci}" required="true" label="#{bundle.lb_fech_naci}" >
+                                <p:ajax update="age" event="dateSelect" listener="#{bean.loadFechaNaci}" />
+                                <p:ajax update="age" event="blur" listener="#{bean.loadFechaNaci}" />
+                                <f:validator validatorId="dateMenorActualValidator"/>
+                            </p:calendar>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <p:outputLabel value="#{bundle.lb_edad}" for="age" />                                
+                            <p:inputText  maxlength="50" id="age" value="#{bean.edad}" title="#{bundle.lb_edad}" readonly="true"/>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <p:outputLabel value="#{bundle.lb_genero}" for="gender" />
+                            <p:selectOneMenu id="gender" value="#{bean.usuarioSAP.husesexo}" required="true" label="#{bundle.lb_genero}" converter="omnifaces.SelectItemsConverter">
+                                <f:selectItem itemLabel="Seleccione Uno" itemValue=""></f:selectItem>
+                                <f:selectItems value="#{bean.listSexos}" var="ref" itemLabel="#{ref.label}" itemValue="#{ref.value}" />
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <p:outputLabel value="#{bundle.lb_est_civ}" for="maritalStatus" />
+                            <p:selectOneMenu id="maritalStatus" value="#{bean.usuarioSAP.huseestadcivil}" converter="omnifaces.SelectItemsConverter" >
+                                <f:selectItem itemLabel="Seleccione Uno" itemValue=""></f:selectItem>
+                                <f:selectItems value="#{bean.listEstadoCivil}" var="ref" itemLabel="#{ref.label}" itemValue="#{ref.value}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <p:outputLabel value="#{bundle.lb_edu}" for="education" />
+                            <p:selectOneMenu id="education" value="#{bean.usuarioSAP.husnniveledu}" required="true" label="#{bundle.lb_edu}" converter="omnifaces.SelectItemsConverter" >
+                                <f:selectItem itemLabel="Seleccione Uno" itemValue=""></f:selectItem>
+                                <f:selectItems value="#{bean.lstNivelEducativo}" var="ref" itemLabel="#{ref.label}" itemValue="#{ref.value}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <p:outputLabel value="#{bundle.lb_etnia}" for="etnia" />
+                            <p:selectOneMenu id="etnia" value="#{bean.usuarioSAP.huscetnia}" converter="omnifaces.SelectItemsConverter" >
+                                <f:selectItem itemLabel="Seleccione Uno" itemValue=""></f:selectItem>
+                                <f:selectItems value="#{bean.lstEtnia}" var="ref" itemLabel="#{ref.label}" itemValue="#{ref.value}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <p:outputLabel value="#{bundle.lb_estrato}" for="estrato" />
+                            <p:selectOneMenu id="estrato" value="#{bean.usuarioSAP.husnestrato}" converter="omnifaces.SelectItemsConverter" >
+                                <f:selectItem itemLabel="Seleccione Uno" itemValue=""></f:selectItem>
+                                <f:selectItems value="#{bean.listEstrato}" var="ref" itemLabel="#{ref.label}" itemValue="#{ref.value}" />
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <p:outputLabel value="#{bundle.lb_ocupa}" for="job" />
+                            <p:autoComplete rendered="#{not empty bean.usuarioSAP}"
+                                            id="job"
+                                            title="#{bundle.tl_ocupa}"
+                                            value="#{bean.selectedOcupa}"
+                                            completeMethod="#{bean.autocmplOcupacion}"
+                                            var="item"
+                                            itemValue="#{item}" itemLabel="#{item.coccdescri}"
+                                            forceSelection="true"
+                                            dropdown="true" 
+                                            placeholder="#{bundle.rq_ocuopa}">
+                                <o:converter converterId="omnifaces.ListConverter" list="#{bean.listOcupacion}" />
+                            </p:autoComplete>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <p:outputLabel value="#{bundle.lb_email}" for="email" />
+                            <p:inputText  maxlength="50" id="email" value="#{bean.usuarioSAP.husccorreoelec}" title="#{bundle.lb_email}"
+                                          label="#{bundle.lb_email}">
+                               
+                            </p:inputText>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <p:outputLabel value="#{bundle.lb_dir}" for="address" />
+                            <p:inputText  maxlength="50" id="address" value="#{bean.usuarioSAP.huscdireccion}" title="#{bundle.lb_dir}" required="true" label="#{bundle.lb_dir}">
+                                <f:validator validatorId="cadena.stringValidator"/>
+                            </p:inputText>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <p:outputLabel value="#{bundle.lb_barrio}" for="locality" />
+                            <p:inputText  maxlength="50" id="locality" value="#{bean.usuarioSAP.huscbarrio}" title="#{bundle.lb_barrio}" required="true" label="#{bundle.lb_barrio}">
+                                <f:validator validatorId="cadena.stringValidator"/>
+                            </p:inputText>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <p:outputLabel value="#{bundle.lb_fijo}" for="phone" />
+                            <p:inputText  maxlength="50" id="phone" value="#{bean.usuarioSAP.husctelefono}" title="#{bundle.lb_fijo}" required="true" label="#{bundle.lb_fijo}"
+                                          validatorMessage="#{bundle.lb_fijo}: Error de validación: Solo se permiten numeros">
+                                <f:validator validatorId="cadena.stringValidator"/>
+                                <f:validateRegex pattern="^([\d]+)?$"/>
+                            </p:inputText>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <p:outputLabel value="#{bundle.lb_movil}" for="movil" />
+                            <p:inputText  maxlength="50" id="movil" value="#{bean.usuarioSAP.husccelular}" title="#{bundle.lb_movil}" required="true" label="#{bundle.lb_movil}"
+                                          validatorMessage="#{bundle.lb_movil}: Error de validación: Solo se permiten numeros">
+                                <f:validator validatorId="cadena.stringValidator"/>
+                                <f:validateRegex pattern="^([\d]+)?$"/>
+                            </p:inputText>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <p:outputLabel value="#{bundle.lb_depart}" for="department" />
+                            <p:selectOneMenu id="department" value="#{bean.usuarioSAP.husndepartamen}" title="#{bundle.lb_depart}" required="true" label="#{bundle.lb_depart}" converter="omnifaces.SelectItemsConverter" >
+                                <f:selectItem itemLabel="Seleccione Uno" itemValue=""></f:selectItem>
+                                <f:selectItems value="#{bean.listDepartamentos}" var="ref" itemLabel="#{ref.label}" itemValue="#{ref.value}"/>
+                                <p:ajax update="city"  listener="#{bean.onchageDepatamentos}" />
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <p:outputLabel value="#{bundle.lb_muni}" for="city" />
+                            <p:selectOneMenu disabled="#{empty bean.listMunicipios}" id="city" value="#{bean.usuarioSAP.husnciudad}" title="#{bundle.lb_muni}" required="true" label="#{bundle.lb_muni}" converter="omnifaces.SelectItemsConverter" >
+                                <f:selectItem itemLabel="Seleccione Uno" itemValue=""></f:selectItem>
+                                <f:selectItems value="#{bean.listMunicipios}" var="ref" itemLabel="#{ref.label}" itemValue="#{ref.value}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <p:outputLabel value="#{bundle.lb_zona}" for="zone" />
+                            <p:selectOneMenu id="zone" value="#{bean.usuarioSAP.husezonareside}" title="#{bundle.lb_zona}" required="true" label="#{bundle.lb_zona}" converter="omnifaces.SelectItemsConverter" >
+                                <f:selectItem itemLabel="Seleccione Uno" itemValue=""></f:selectItem>
+                                <f:selectItems value="#{bean.listzona}" var="ref" itemLabel="#{ref.label}" itemValue="#{ref.value}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                    </p:panelGrid>
+                </div>
+
+            </p:panel> 
+
+            <p:panel id="datosAfili" widgetVar="panel2" header="#{bundle.header_afi}"
+                     rendered="#{bean.showPanels}">
+
+                <div class="ui-fluid">
+                    <p:panelGrid columns="4" layout="grid" columnClasses="ui-grid-col-3,ui-grid-col-3,ui-grid-col-3,ui-grid-col-3" styleClass="ui-panelgrid-blank">
+                        <h:panelGroup>
+                            <p:outputLabel value="#{bundle.lb_como_conoce}" for="know" />
+                            <p:selectOneMenu id="know" value="#{bean.usuarioSAP.husnconoprofam}" title="#{bundle.lb_como_conoce}" required="true" label="#{bundle.lb_como_conoce}" converter="omnifaces.SelectItemsConverter" >
+                                <f:selectItem itemLabel="Seleccione Uno" itemValue=""></f:selectItem>
+                                <f:selectItems value="#{bean.lstConoceProfamilia}" var="ref" itemLabel="#{ref.label}" itemValue="#{ref.value}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <p:outputLabel value="#{bundle.lb_tip_cli}" for="clientType" />
+                            <p:selectOneMenu id="clientType" value="#{bean.usuarioSAP.husetipcliente}" title="#{bundle.lb_tip_cli}" required="true" label="#{bundle.lb_tip_cli}" converter="omnifaces.SelectItemsConverter" >
+                                <f:selectItem itemLabel="Seleccione Uno" itemValue=""></f:selectItem>
+                                <f:selectItems value="#{bean.listTipoCliente}" var="ref" itemLabel="#{ref.label}" itemValue="#{ref.value}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <p:outputLabel value="#{bundle.lb_tip_afi}" for="AfiType" />
+                            <p:selectOneMenu id="AfiType" value="#{bean.usuarioSAP.husetipoafilia}" title="#{bundle.lb_tip_afi}" required="true" label="#{bundle.lb_tip_afi}" converter="omnifaces.SelectItemsConverter" >
+                                <f:selectItem itemLabel="Seleccione Uno" itemValue=""></f:selectItem>
+                                <f:selectItems value="#{bean.listTipoAfiliacion}" var="ref" itemValue="#{ref.value}" itemLabel="#{ref.label}"/>
+                                <p:ajax partialSubmit="true" update="numberAfiPg,typeVinPg,epsPg"  listener="#{bean.onchageTypeAfi}"/>
+                            </p:selectOneMenu>
+                        </h:panelGroup>
+                        <p:outputPanel layout="none" autoUpdate="true">
+                            <h:panelGroup id="numberAfiPg" rendered="#{bean.mostrarAfiliacion}">
+                                <p:outputLabel value="#{bundle.lb_num_afi}" for="numberAfi"/>
+                                <p:inputText  maxlength="50" id="numberAfi" value="#{bean.usuarioSAP.huscnumafiliac}" title="#{bundle.lb_num_afi}" >
+                                    <f:validator validatorId="cadena.stringValidator"/>
+                                </p:inputText>
+                            </h:panelGroup>
+                        </p:outputPanel>    
+                        <p:outputPanel layout="none" autoUpdate="true">
+                            <h:panelGroup id="typeVinPg" rendered="#{bean.mostrarAfiliacion}">
+                                <p:outputLabel value="#{bundle.lb_tip_vin}" for="typeVin"/>
+                                <p:selectOneButton value="#{bean.usuarioSAP.husetipvincula}" id="typeVin" style="font-size: 0.7em;">
+                                    <f:selectItem itemLabel="#{bean.tipoVinculacionOne}" itemValue="C" />
+                                    <f:selectItem itemLabel="#{bean.tipoVinculacionTwo}" itemValue="B" />
+                                    <f:ajax event="change"/>
+                                </p:selectOneButton>
+                            </h:panelGroup>
+                        </p:outputPanel>    
+                       <p:outputPanel layout="none" autoUpdate="true">
+                            <h:panelGroup id="epsPg" rendered="#{bean.mostrarAfiliacion}">
+                              
+						<p:outputLabel value="#{bundle.lb_eps}" for="eps"/>
+                        <p:panelGrid columns="2" columnClasses="aux-force-padding-1px ui-grid-col-10,aux-force-padding-1px ui-grid-col-2" >
+                            <p:inputText id="eps" value="#{bean.entidad.ceaccodigo}" title="#{bundle.lb_eps}" autocomplete="false">
+                                <p:ajax event="change" listener="#{bean.changeEpsSeleccion}" update="@form" />
+                            </p:inputText>
+                            <p:commandButton  icon="fa fa-search"
+                                              update="@widgetVar(modalEPS)" process="@this" 
+                                              oncomplete="PF('modalEPS').show();"  actionListener="#{bean.clearModalEps()}" />
+                        </p:panelGrid>
+                         <p:spacer/>
+                        <p:outputLabel value="#{bean.entidad.ceacnombre}" />
+  
+                            </h:panelGroup>
+                        </p:outputPanel>    
+  
+                    </p:panelGrid>
+                </div>
+            </p:panel>  
+
+            <p:panel id="datosAcom" widgetVar="panel3" header="#{bundle.header_acom}"
+                     rendered="#{bean.showPanels}">
+
+                <div class="ui-fluid">
+                    <p:panelGrid columns="4" layout="grid" columnClasses="ui-grid-col-3,ui-grid-col-3,ui-grid-col-3,ui-grid-col-3" styleClass="ui-panelgrid-blank">
+                        <h:panelGroup>
+                            <p:outputLabel value="#{bundle.lb_nom_acomp}" for="scortName" />
+                            <p:inputText  maxlength="50" id="scortName" value="#{bean.usuarioSAP.huscnomacompana}" title="#{bundle.lb_nom_acomp}" required="true" label="#{bundle.lb_nom_acomp}">
+                                <f:validator validatorId="cadena.stringValidator"/>
+                            </p:inputText>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <p:outputLabel value="#{bundle.lb_tel_acomp}" for="scortPhone" />
+                            <p:inputText  maxlength="50" id="scortPhone" value="#{bean.usuarioSAP.husctelacompana}" title="#{bundle.lb_tel_acomp}">
+                                <f:validator validatorId="cadena.stringValidator"/>
+                            </p:inputText>
+                        </h:panelGroup>
+                        <h:panelGroup>
+                            <p:outputLabel value="#{bundle.lb_par_acomp}" for="scortRelationship" />
+                            <p:inputText  maxlength="50" id="scortRelationship" value="#{bean.usuarioSAP.huscparresponsa}" title="#{bundle.lb_par_acomp}">
+                                <f:validator validatorId="cadena.stringValidator"/>
+                            </p:inputText>
+                        </h:panelGroup>
+                    </p:panelGrid>
+                </div>
+            </p:panel>
+
+            <p:spacer />
+            <p:panel rendered="#{bean.showPanels}" styleClass="ui-button-group">
+                <p:commandButton actionListener="#{bean.invokeCreaCLienteWS}" value="#{bundle.bt_guardar}" rendered="#{type == 'add'}"
+                                 update="@widgetVar(growl),@form" icon="fa fa-floppy-o"/>
+                <p:commandButton actionListener="#{bean.invokeModificaCLienteWS}" value="#{bundle.bt_modificar}" rendered="#{type == 'edit'}"
+                                 update="@widgetVar(growl),@form" icon="fa fa-floppy-o"/>
+                <p:commandButton value="#{bundle.bt_nuevo}" icon="fa fa-plus" action="#{bean.reload}" process="@this"/>
+            </p:panel>
+        </p:outputPanel>
+
+    </h:form>
+
+    <p:dialog widgetVar="modalUsuarios" header="#{bundle.header_resultado}" modal="true" resizable="false" appendTo="@(body)" width="720">
+        <h:form>
+            <div class="ui-fluid">
+                
+                <p:messages id="messagesModalUsuario" closable="true" severity="error" />
+                
+                <p:dataTable id="usuariosDatalist" value="#{bean.lstUsuarios}" var="item"
+                             selectionMode="single" selection="#{bean.usuarioSAP}"
+                             paginator="true"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowKey="#{item.huslnumero}"
+                             rows="10"
+                             rowsPerPageTemplate="#{bundle.rowsPerPageTemplate}">
+
+                    <p:ajax event="rowSelect"   update=":AddUserForm,@widgetVar(growl)" oncomplete="PF('modalUsuarios').hide();" listener="#{bean.postLoadUsuarioSap}"/>
+                    <p:ajax event="rowUnselect" update=":AddUserForm,@widgetVar(growl)" oncomplete="PF('modalUsuarios').hide();" listener="#{bean.postLoadUsuarioSap}"/>
+
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.lb_num_docu}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.husanumeiden}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.lb_nombre}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.huscprimernomb} #{item.huscsegundapel}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.lb_fecha_nac}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.husdfechanacim}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.lb_num_user}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.huslnumero}"/>
+                    </p:column>
+                    <p:column>
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.lb_estado_user}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.huseestado}"/>
+                    </p:column>
+                </p:dataTable>
+            </div>
+        </h:form>
+    </p:dialog>
+
+    <p:dialog widgetVar="modalEPS" header="#{bundle.header_buscar_eps}" modal="true" resizable="false" appendTo="@(body)" width="900" >
+        <h:form>
+            <div class="ui-fluid" >
+                <p:messages id="messagesModalEPS" closable="true" severity="error" />
+                <p:panelGrid columns="4" styleClass="ui-panelgrid-blank">
+
+                    <p:outputLabel value="#{bundle.lb_codigo}" for="cod_eps"></p:outputLabel>
+                    <p:inputText id="cod_eps" value="#{bean.entidadQuery.ceaccodigo}"/>
+
+
+                    <p:outputLabel value="#{bundle.lb_nombre_tabla}" for="desc_eps"/>
+                    <p:inputText id="desc_eps" value="#{bean.entidadQuery.ceacnombre}" />
+
+                </p:panelGrid>
+            </div>
+            <p:spacer/>
+            <p:panel styleClass="ui-button-group">
+                <p:commandButton icon="fa fa-search" value="#{bundle.bt_consulta}" actionListener="#{bean.consultarEps}" update="@widgetVar(growl),@form" oncomplete="PF('modalEPS').initPosition();" />
+                <p:commandButton icon="fa fa-times" value="#{bundle.bt_cerrar}" type="button" onclick="PF('modalEPS').hide();" />                        
+            </p:panel>
+            <div class="ui-fluid" >
+                <p:dataTable id="epsDatalist" value="#{bean.lstEps}" var="item" scrollable="true" scrollHeight="230"
+                             selectionMode="single" selection="#{bean.entidad}"
+                             paginator="true"
+                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                             rowKey="#{item.ceaccodigo}"
+                             rows="10"
+                             rowsPerPageTemplate="#{bundle.rowsPerPageTemplate}">
+
+                    <p:ajax event="rowSelect"   update=":AddUserForm:eps,@widgetVar(growl)" oncomplete="PF('modalEPS').hide();"/>
+                    <p:ajax event="rowUnselect" update=":AddUserForm:eps,@widgetVar(growl)" oncomplete="PF('modalEPS').hide();"/>
+                    <p:ajax event="page" oncomplete="PF('modalEPS').initPosition();" />
+
+                    <p:column style="width: 20%">
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.lb_codigo}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.ceaccodigo}"/>
+                    </p:column>
+                    <p:column style="width: 80%">
+                        <f:facet name="header">
+                            <h:outputText value="#{bundle.lb_nombre_tabla}"/>
+                        </f:facet>
+                        <h:outputText value="#{item.ceacnombre}"/>
+                    </p:column>
+                </p:dataTable>
+            </div>
+        </h:form>
+    </p:dialog>
+    
+    
+ 
+ <style type="text/javascript">
+ function searchByEnterAndReturn(e){ 
+    if(e.keyCode==13){
+        document.getElementById("body:AddUserForm:datosCons:consultaUsuario").click(); 
+        
+    }  
+ }
+ </style>
+
+
+</ui:fragment>
+

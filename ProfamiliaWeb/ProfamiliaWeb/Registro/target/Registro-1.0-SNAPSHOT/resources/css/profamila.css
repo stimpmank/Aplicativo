@@ -1,0 +1,220 @@
+body, .ui-panel{
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#ffffff+0,f4f4f4+100 */
+    background: rgb(255,255,255); /* Old browsers */
+    background: -moz-linear-gradient(top, rgba(255,255,255,1) 10%, rgba(239,239,239,1) 90%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, rgba(255,255,255,1) 10%,rgba(239,239,239,1) 90%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, rgba(255,255,255,1) 10%,rgba(239,239,239,1) 90%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#f4f4f4',GradientType=0 ); /* IE6-9 */
+}
+
+.aux-force-padding-1px{
+    padding: 1px !important;
+}
+.ui-messages-info-summary, .ui-messages-warn-summary, .ui-messages-error-summary, .ui-messages-fatal-summary, .ui-message-info-summary, .ui-message-warn-summary, .ui-message-error-summary, .ui-message-fatal-summary,
+.ui-widget {
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 0.78em;
+}
+.ui-widget .ui-widget, .ui-dialog.ui-widget-content .ui-dialog-content {
+    font-size: 100%;
+}
+
+.ui-widget input,
+.ui-widget select,
+.ui-widget textarea,
+.ui-widget button {
+    font-family: Arial,Helvetica,sans-serif;
+    /*font-size: .9em !important;*/
+}
+
+.ui-fluid .ui-panelgrid {
+    width: 100%;
+}
+
+.ui-button-group {
+    text-align: center;
+    border: none;
+    background: transparent;
+}
+
+span.ui-button-icon-left.ui-icon.ui-c.fa {
+    height: auto;
+    margin-top: -6px;
+}
+
+.ui-dialog.ui-widget-content .ui-dialog-title {
+    /*font-size: 1.3em;*/
+    color: #333;
+}
+
+
+.ui-widget-header {
+    border: 1px solid #3b88c7;
+    color: #fff;
+    background: #42A5F6;                    
+}
+
+.ui-buttonset .ui-button {
+    padding: .3em;
+}
+
+
+.ui-selectonemenu-trigger.ui-state-default.ui-corner-right.ui-state-focus,
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active,
+button.ui-button.ui-widget.ui-state-default {
+    border: 1px solid #3b88c7;
+    background: #42A5F6 ;
+    color: #fff;
+    font-weight: bold;
+    text-shadow: none;
+    padding: .3em;
+}
+
+.ui-state-highlight,
+.ui-widget-content .ui-state-highlight,
+.ui-widget-header .ui-state-highlight {
+    border: 1px solid #3b88c7;
+    background: #8ec5f2;
+    color: #3b88c7;
+}
+
+.ui-widget-overlay {
+    background: #aad9ff;
+    opacity: .6;
+    filter: Alpha(Opacity=20); /* support: IE8 */
+}
+.ui-widget-shadow {
+    -webkit-box-shadow: 0px 0px 5px #666666;
+    box-shadow: 0px 0px 5px #666666;
+}
+
+
+/*iconos arriba*/
+.topIcon {
+    color: #42A5F6;
+    font-size: 1.2em;
+    vertical-align: super;
+    font-weight: bold;
+}
+.ui-button-icon-only .ui-icon {
+    left: 50%;
+    margin-left: -8px;
+}
+
+.ui-button-text-only .ui-button-text {
+    font-size: 130%;
+    padding: 0.1em 0.5em;
+}
+
+
+.ui-button-icon-only .ui-button-text {
+    padding: 0;
+}
+
+.ui-inputfield.ui-state-error, .ui-widget-header .ui-inputfield.ui-state-error, .ui-widget-content .ui-inputfield.ui-state-error{
+    border-color: #ccc;
+    border-left: 2px solid #ce0606;
+    color: #999;
+}
+.ui-state-error, .ui-widget-content .ui-state-error, .ui-widget-header .ui-state-error{
+    border: 1px solid #ccc;
+    border-left: 2px solid #ce0606;
+    color: #999;
+}
+.ui-outputlabel.ui-state-error {
+    border: 0 none;
+    background: none;
+    color: #ce0606;
+}
+.ui-state-error {
+    border: inherit;
+    border-left: 2px solid #ce0606;
+}
+
+.ui-growl-item-container { 
+    background-image: none !important;
+    right: 13px;
+    top: 13px;
+}
+
+.ui-menu.ui-widget li > .ui-menuitem-link.ui-state-hover {
+    color: #ffffff;
+    text-decoration: none;
+    background: none;
+    background-color: #8ec5f2;
+    filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ff0088cc', endColorstr='#ff0077b3', GradientType=0);
+    border-radius: 3px
+}
+
+
+
+* > ul > li.ui-widget.ui-menuitem.ui-corner-all.ui-menu-parent.ui-menuitem-active > a{
+    background: none;
+    color:#333
+}
+ul.ui-menu-child {
+    white-space: nowrap !important;
+    width: auto !important;
+    padding: .4em !important;
+}   
+.ui-selectonemenu .ui-selectonemenu-trigger .ui-icon {
+    margin: auto;
+    margin-top: 1px;
+}
+.ui-fluid .ui-selectonemenu {
+    min-width: 0 !important;
+    max-width: 100%;
+}    
+
+.ui-fluid .ui-autocomplete .ui-autocomplete-dropdown.ui-button, 
+.ui-fluid .ui-selectonemenu .ui-selectonemenu-trigger {
+    width: 35px;
+    border: 0;
+    border-left: 1px solid #ccc;
+    background-image: -ms-linear-gradient(top, #ffffff, #e6e6e6);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ffffff), to(#e6e6e6));
+    background-image: -webkit-linear-gradient(top, #ffffff, #e6e6e6);
+    background-image: -o-linear-gradient(top, #ffffff, #e6e6e6);
+    background-image: linear-gradient(top, #ffffff, #e6e6e6);
+    background-image: -moz-linear-gradient(top, #ffffff, #e6e6e6);
+}
+
+.ui-selectonemenu-panel .ui-selectonemenu-list-item {
+    /*font-size: .8em;*/
+}
+
+.ui-fluid .ui-autocomplete .ui-autocomplete-dropdown.ui-button {
+    width: 36px;
+    border: 1px solid #ccc;
+}
+
+/*
+.ui-state-error, .ui-widget-content .ui-state-error, .ui-widget-header .ui-state-error{
+    background: none;
+}
+
+label.ui-selectonemenu-label.ui-inputfield.ui-corner-all, 
+.ui-inputfield.ui-state-error, .ui-widget-header .ui-inputfield.ui-state-error, .ui-widget-content .ui-inputfield.ui-state-error, password{
+    border: inherit !important;
+    border: 1px solid #cccccc !important;
+    border-left: 2px solid red  !important;
+}
+
+label.ui-outputlabel.ui-widget.ui-state-error {
+    border: none !important;
+}
+*/
+
+.ui-layout-unit, .ui-layout-unit .ui-layout-unit-content {
+    padding: 0;
+    border: 0 none;
+    background: transparent;
+}
+
+.ui-layout-unit:not(#mainLU) .ui-layout-unit-content {
+    overflow: hidden;
+}               
+
+button.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-icon-only.ui-button-icon-only {
+    padding: 0;
+}

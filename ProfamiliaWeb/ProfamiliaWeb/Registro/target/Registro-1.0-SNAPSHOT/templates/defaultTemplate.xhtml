@@ -1,0 +1,149 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:o="http://omnifaces.org/ui">
+
+    <f:view contentType="text/html">
+        <h:head>
+            <title>Profamilia</title>
+            <h:outputStylesheet library="css" name="themes/green/theme.css"/>
+            <h:outputStylesheet library="css" name="profamila.css"/>
+
+            <h:outputScript library="js" name="jsfcrud.js"/>
+
+        </h:head>
+        <h:body>
+
+            <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" /> 
+
+            <p:dialog widgetVar="statusDialog" modal="true" draggable="false" closable="false" resizable="false" showHeader="false" onShow="PF('statusDialog').initPosition();">
+                <p:panelGrid columns="1" styleClass="ui-panelgrid-blank" style="text-align:center;">
+                    <h:graphicImage library="img" name="loading.gif" height="50px" width="50px"/>
+                    <p:outputLabel value="PROCESANDO" styleClass="topIcon"/>
+                </p:panelGrid>
+            </p:dialog>
+
+            <p:layout fullPage="true" style="border:none;" widgetVar="lyt">
+
+                <p:layoutUnit position="north" gutter="2" style="overflow: hidden;" collapsible="true" >
+
+                    <ui:insert name="encabezado">
+
+                        <p:toolbar >
+                            <p:toolbarGroup align="left">
+                                <p:commandLink style="margin-top: 15px">
+                                    <p:graphicImage value="#{request.contextPath}/javax.faces.resource/img/logo.png.pf" />                                        
+                                </p:commandLink>
+                            </p:toolbarGroup>
+                            <p:toolbarGroup align="right">
+
+                                <h:panelGrid columns="1">  
+
+                                    <h:panelGrid columns="2">
+                                        <h:panelGrid columns="2">
+                                            <h:outputText styleClass="topIcon fa fa-user-circle-o" />
+                                            <h:outputText   value="#{userBean.user.cpusuario.curcnombre}"  style="color:#333;" />
+                                        </h:panelGrid>
+                                        <h:panelGrid columns="2">
+                                            <h:outputText styleClass="topIcon fa fa-medkit" />
+                                            <h:outputText   value="#{userBean.user.cpusuario.curnclinic.cclcnombre}"  style="color:#333" />                                
+                                        </h:panelGrid>                   
+                                    </h:panelGrid>
+
+                                    <h:panelGrid columns="2">                        
+                                        <p:commandButton value="Cambiar contraseña" title="Cambiar contraseña" update="@widgetVar(ChangePassword)" oncomplete="PF('ChangePassword').show();" icon="fa fa-refresh" />
+                                        <h:panelGroup>
+                                            <p:commandButton value="Salir" title="Salir" action="#{userBean.logout}" icon="fa fa-power-off" />
+                                            <p:commandButton type="button" value="Ocultar" title="Ocultar" icon="fa fa-compress" onclick="PF('lyt').toggle('north')"/>
+                                        </h:panelGroup>
+
+                                    </h:panelGrid>
+                                </h:panelGrid>
+                            </p:toolbarGroup>
+                        </p:toolbar>
+                    </ui:insert>
+
+                </p:layoutUnit>
+                
+                <p:layoutUnit position="south" size="100" header="Bottom" resizable="true" closable="true" collapsible="true">
+       				 <h:outputText value="South unit content." />
+   			    </p:layoutUnit>
+   			    <p:layoutUnit position="west" size="200" header="Left" resizable="true" closable="true" collapsible="true">
+        <ui:insert name="west">
+      </ui:insert>
+    </p:layoutUnit>
+ 
+    <p:layoutUnit position="east" size="200" header="Right" resizable="true" closable="true" collapsible="true" effect="drop">
+        <h:outputText value="Right unit content." />
+    </p:layoutUnit>
+
+                <p:layoutUnit position="center" id="mainLU">
+
+                    <ui:insert name="menu">
+                        <h:form id="formMenu">
+                            <p:menubar id="menuBar" model="#{sessionMenuBean.model}">           
+                            </p:menubar>
+                            <p:sticky target="menuBar"/>
+                        </h:form>
+
+                    </ui:insert>
+
+                    <p:panel id="growl" widgetVar="growl" style="border:none; background: transparent; padding: 0; margin: 0">
+                        <p:messages autoUpdate="true" globalOnly="true" closable="true" />                
+                    </p:panel>
+
+                    <div align="center">
+                        <div align="left" style="margin: 1em;">
+                            <ui:insert name="contenido">
+
+                            </ui:insert>
+                        </div>
+                    </div>
+                    
+                    
+                    <p:outputPanel autoUpdate="true">
+                        <script type="text/javascript">
+                            //<![CDATA[
+                            // Desactiva el enter en el formulario
+                          //  $(function () {
+                          //      $('form').on('keypress', function (event) {
+                          //          if (event.which === 13 && $(event.target).is(':input:not(textarea,:button,:submit,:reset)')) {
+                          //              event.preventDefault();
+                          //          }
+                           //     });
+                          //  });
+
+                            //]]>
+                        </script>
+                    </p:outputPanel>
+                    <o:highlight styleClass="ui-state-error" />
+
+                    <p:dialog widgetVar="ChangePassword" header="Cambiar contraseña" modal="true" resizable="false" appendTo="@(body)">
+                        <h:form>
+                            <p:messages id="messagesChangePassword" closable="true" severity="error" />
+                            <p:panelGrid columns="2">
+                                <p:outputLabel value="Contraseña Actual:" for="pwdActual" ></p:outputLabel>
+                                <p:password id="pwdActual" value="#{userBean.passwd}" label="Contraseña Actual" required="true" />
+                                <p:outputLabel value="Nueva Contraseña:" for="passwdNew"></p:outputLabel>
+                                <p:password id="passwdNew" value="#{userBean.passwdNew}" label="Nueva Contraseña" required="true" match="passwdNewConfirm"/>
+                                <p:outputLabel value="Confirmar Nueva Contraseña:" for="passwdNewConfirm" ></p:outputLabel>
+                                <p:password id="passwdNewConfirm" value="#{userBean.passwdNewConfirm}" label="Confirmar Nueva Contraseña" required="true" />
+                            </p:panelGrid>
+                            <p:panel styleClass="ui-button-group">
+                                <p:commandButton value="Cambiar" actionListener="#{userBean.changePasswordListener}" update="@widgetVar(growl),messagesChangePassword,@form" oncomplete="handleSubmit(args,'ChangePassword');"/>
+                                <p:commandButton value="Cerrar" type="button" onclick="PF('ChangePassword').hide();" />                        
+                            </p:panel>
+                        </h:form>
+                    </p:dialog>
+
+                </p:layoutUnit>
+
+            </p:layout>
+
+        </h:body>
+    </f:view>
+</html>
